@@ -45,7 +45,7 @@ ad_proc openfts_driver__search {
     if { ![info exists tables] } {
         set tables ""
     }
-    if { [info exists out] && [string length out] > 0 } {
+    if { [info exists out] && [string length $out] > 0 } {
         set out ",\n $out"
     } else {
         set out ""
