@@ -98,6 +98,7 @@ ad_proc openfts_driver__index {
     {keywords ""}
 } {
     @author Neophytos Demetriou
+    @param keywords <b>NB:</b> keyword support is not currently implemented. Supplying keywords will not generate an error, but will have no effect.
 } {
 
     set exists_p [db_0or1row exists_p {select 1 from txt where tid=:tid}]
