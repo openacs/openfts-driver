@@ -1,3 +1,11 @@
+ad_library { 
+    OpenFTS driver procs 
+
+    @author Neophytos Demetriou
+    @creation-date 2001-09-01
+    @cvs-id $Id$
+}
+
 ad_proc openfts_driver__search {
     query
     offset
