@@ -2,7 +2,7 @@ Last updated: September 1st, 2001
 Maintainer: Neophytos Demetriou (k2pts@cytanet.com.cy)
 
 - Make sure you have installed all headers (for example, spi.h) 
-  using gmake-install-headers during the PostgreSQL installation. 
+  using "gmake install-all-headers" during the PostgreSQL installation. 
   If you have not installed intarray, please do so now. intarray 
   is under the contrib directory of the PostgreSQL source code. 
 
