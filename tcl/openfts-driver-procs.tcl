@@ -2,6 +2,9 @@ ad_proc openfts_driver__search {
     query
     offset
     limit
+    user_id
+    df
+    dt
 } {
     @author Neophytos Demetriou
 } {
@@ -9,7 +12,6 @@ ad_proc openfts_driver__search {
     set result(count) 0
     set result(ids) ""
     set result(stopwords) ""
-
 
     array set self [Search::OpenFTS::new ofts]
     if ![array size self] {
@@ -42,22 +44,45 @@ ad_proc openfts_driver__search {
     }
     set txttbl [split $opt(txttid) .]
 
+
+    set date_range_condition ""
+    if { $df != "" } {
+	append date_range_condition "'$df' <= last_modified and"
+    }
+    if { $dt != "" } {
+	append date_range_condition "'$dt' >= last_modified and"
+    }
+
+    set permission_check_enabled_p [ad_parameter -package_id [apm_package_id_from_key openfts-driver] permission_check_enabled_p]
+    set permission_check_condition ""
+    if { $permission_check_enabled_p } {
+	append permission_check_condition "and acs_permission__permission_p( $opt(txttid), $user_id, 'read') = 't'"
+    }
+
     set sql_count "
         select count(*)
         from [lindex $txttbl 0]$tables
-        where $condition"
+        where 
+            $date_range_condition
+            $condition
+            $permission_check_condition"
 
     set sql_sort "
-        select $opt(txttid) as id$out 
+        select $opt(txttid) as object_id$out 
         from [lindex $txttbl 0]$tables 
-        where $condition
+        where 
+            $date_range_condition
+            $condition
+            $permission_check_condition
         $order
         limit $limit
         offset $offset"
 
     set result(stopwords) $opt(rejected)
     set result(count) [db_exec_plsql sql_count $sql_count]
-    db_foreach sql_sort $sql_sort {lappend result(ids) $id}
+    if { $result(count) > 0} { 
+	db_foreach sql_sort $sql_sort {lappend result(ids) $object_id}
+    }
     return [array get result]
 
 }
@@ -113,7 +138,7 @@ ad_proc openfts_driver__update_index {
 } {
 
     openfts_driver__unindex $tid
-    openfts_driver__index $tid $txt $title
+    openfts_driver__index $tid $txt $title $keywords
 
     return
 }
