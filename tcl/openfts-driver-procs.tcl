@@ -103,18 +103,17 @@ ad_proc openfts_driver__index {
 
     set exists_p [db_0or1row exists_p {select 1 from txt where tid=:tid}]
 
-    if ![set exists_p] {
-
+    if {! $exists_p} {
 	db_dml insert_tid {insert into txt (tid) values (:tid)}
-
+    } else {
+        openfts_driver__unindex $tid
     }
-    array set idx [Search::OpenFTS::Index::new]
 
-    Search::OpenFTS::Index::index idx $tid $txt $title
+    array set idx [Search::OpenFTS::Index::new]
+    catch { Search::OpenFTS::Index::index idx $tid $txt $title } 
     Search::OpenFTS::DESTROY
 
     return
-
 }
 
 
@@ -123,7 +122,6 @@ ad_proc openfts_driver__unindex {
 } {
     @author Neophytos Demetriou
 } {
-
     array set idx [Search::OpenFTS::Index::new]
 
     Search::OpenFTS::Index::delete idx $tid
