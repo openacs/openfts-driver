@@ -9,7 +9,7 @@ ad_after_server_initialization search_engine_driver {
    if { [llength $files] == 0 } {
        error "Unable to locate $openfts_tcl_src_path."
    }
-   ns_log Notice "sourcing files from ${openfts_tcl_src_path}"
+   ns_log Debug "search_engine_driver: sourcing files from ${openfts_tcl_src_path}"
    foreach file [lsort $files] {
       source $file
    }
