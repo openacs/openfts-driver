@@ -1,13 +1,23 @@
 catch {
     set ngroups [db_exec_plsql get_ngroups "select mod from fts_conf where did = -2"]
-}
-
-catch {
-    db_dml drop_table "drop table txt;"
+    set table_name [lindex [split [db_exec_plsql get_txttid "select mod from fts_conf where did = -1"] .] 0]
 }
 
 catch {
     db_dml drop_fts_conf "drop table fts_conf;"
+}
+
+
+catch {
+    db_dml drop_trigger "drop trigger ${table_name}_utrg;"
+}
+
+catch {
+    db_dml drop_function "drop function ${table_name}_utrg ();"
+}
+
+catch {
+    db_dml drop_table "drop table ${table_name};"
 }
 
 catch {
