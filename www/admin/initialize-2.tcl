@@ -56,4 +56,4 @@ db_dml create_trigger "create trigger ${table_name}_utrg before update on ${tabl
 
 Search::OpenFTS::Index::create_index idx
 
-ad_returnredirect ""
+ad_returnredirect "./"

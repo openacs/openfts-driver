@@ -6,7 +6,7 @@ ad_page_contract {
 
 }
 
-set context_bar [ad_context_bar {Initialize OpenFTS Engine}]
+set context [list {Initialize OpenFTS Engine}]
 
 template::form create openfts_init_form \
     -action initialize-2

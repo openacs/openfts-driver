@@ -1,3 +1,3 @@
-set context_bar [ad_context_bar]
+set context [list]
 
 ad_return_template

@@ -34,4 +34,4 @@ catch {
     db_dml drop_s_fts_unknown_lexem "drop sequence s_fts_unknown_lexem;"
 }
 
-ad_returnredirect ""
+ad_returnredirect "./"
