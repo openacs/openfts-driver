@@ -1,0 +1,57 @@
+Last updated: September 1st, 2001
+Maintainer: Neophytos Demetriou (k2pts@cytanet.com.cy)
+
+- Make sure you have installed all headers (for example, spi.h) 
+  using gmake-install-headers during the PostgreSQL installation. 
+  If you have not installed intarray, please do so now. intarray 
+  is under the contrib directory of the PostgreSQL source code. 
+
+- Download Search-OpenFTS-tcl-0.1.tar.gz from http://openfts.sourceforge.net/
+  and save it to /tmp/Search-OpenFTS-tcl-0.1.tar.gz
+
+- Log in as the root user:
+
+	su -
+
+- Untar the archive file:
+
+	cd /usr/local/src
+	tar -xzvf /tmp/Search-OpenFTS-tcl-0.1.tar.gz
+
+
+- Install the OpenFTS AOLServer module:
+
+	chown -R nsadmin.web Search-OpenFTS-tcl-0.1/
+	cd Search-OpenFTS-tcl-0.1/
+	./configure --with-aolserver-src=AOLSERVER_SRC_DIR 
+	make
+ 	cd aolserver
+	make
+	cp nsfts.so AOLSERVER_BIN_DIR
+	
+- Edit nsd.tcl file and add entry for nsfts module:
+
+       	ns_param   nssock          ${bindir}/nssock.so 
+       	ns_param   nslog           ${bindir}/nslog.so 
+  	...
+        ns_param   nsfts           ${bindir}/nsfts.so
+
+
+
+- Load intarray and func_pgsql
+
+	Edit load.sql under the openfts-driver/sql/postgresql directory.
+	psql -f load.sql your-database-name
+
+- Install and mount the openfts-driver package
+
+- Restart AOLserver
+
+- Go to the administration page and initialize the OpenFTS engine by clicking on the appropriate link.
+
+- Visit the acs-service-contract package page. If the search package is installed, you will see
+  a list item under "Valid Uninstalled Bindings" between FtsEngineDriver and openfts-driver. Install it
+  by clicking on the appropriate link. [Note: We will automate this before the final release of OpenACS-4.x]
+
+
+
