@@ -23,7 +23,9 @@ ad_proc openfts_driver__search {
 
     array set self [Search::OpenFTS::new ofts]
     if ![array size self] {
+        Search::OpenFTS::DESTROY
         error "Search failed."
+        return
     }
 
     set opt(rejected) [list]
@@ -82,6 +84,8 @@ ad_proc openfts_driver__search {
     if { $result(count) > 0} { 
 	db_foreach sql_sort $sql_sort {lappend result(ids) $object_id}
     }
+    Search::OpenFTS::DESTROY
+
     return [array get result]
 
 }
@@ -106,7 +110,8 @@ ad_proc openfts_driver__index {
     array set idx [Search::OpenFTS::Index::new]
 
     Search::OpenFTS::Index::index idx $tid $txt $title
-    
+    Search::OpenFTS::DESTROY
+
     return
 
 }
@@ -121,6 +126,7 @@ ad_proc openfts_driver__unindex {
     array set idx [Search::OpenFTS::Index::new]
 
     Search::OpenFTS::Index::delete idx $tid
+    Search::OpenFTS::DESTROY
 
     return
 }
@@ -138,6 +144,7 @@ ad_proc openfts_driver__update_index {
 
     openfts_driver__unindex $tid
     openfts_driver__index $tid $txt $title $keywords
+    Search::OpenFTS::DESTROY
 
     return
 }
@@ -166,8 +173,10 @@ ad_proc openfts_driver__summary {
 
     array set fts [Search::OpenFTS::new ofts]
 
-    return [Search::OpenFTS::get_headline fts opts]
+    set summary [Search::OpenFTS::get_headline fts opts]
+    Search::OpenFTS::DESTROY
 
+    return $summary
 }
 
 
