@@ -24,17 +24,12 @@ template::element create openfts_init_form table_id \
 template::element create openfts_init_form dict \
     -html "size 40" \
     -label "Dictionaries" \
-    -value "Search::OpenFTS::Dict::PorterEng Search::OpenFTS::Dict::UnknownDict"
-
-template::element create openfts_init_form parser \
-    -html "size 40" \
-    -label "Parser" \
-    -value Search::OpenFTS::Parser
+    -value "Search::OpenFTS::Dict::PorterEng {mod Search::OpenFTS::Dict::UnknownDict param {table fts_unknown_lexem}}"
 
 template::element create openfts_init_form numbergroup \
     -html "size 40" \
     -label "Number of index tables" \
-    -value 13
+    -value 10
 
 template::element create openfts_init_form ignore_headline \
     -html "size 40" \
@@ -56,9 +51,9 @@ template::element create openfts_init_form use_index_table \
     -label "use_index_table" \
     -value 1
 
-template::element create openfts_init_form use_index_array \
+template::element create openfts_init_form txtidx_field \
     -html "size 40" \
-    -label "use_index_array" \
+    -label "txtidx_field" \
     -value fts_index
 
 template::element create openfts_init_form submit \

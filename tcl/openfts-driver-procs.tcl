@@ -23,17 +23,16 @@ ad_proc openfts_driver__search {
 
     array set self [Search::OpenFTS::new ofts]
     if ![array size self] {
+        Search::OpenFTS::DESTROY
         error "Search failed."
+        return
     }
 
     set opt(rejected) [list]
 
-    if { ![info exists opt(txttid)] || [string equal $opt(txttid) ""] } {
-        set opt(txttid) $self(TXTTID)
-    }
+    foreach {out condition order} [Search::OpenFTS::get_sql self $query opt] break
 
-    foreach {out tables condition order} [Search::OpenFTS::get_sql self $query opt] break
-
+    set result(stopwords) $opt(rejected)
     if { ![string length $condition] } {
         return [array get result]
     }
@@ -42,16 +41,11 @@ ad_proc openfts_driver__search {
     } else {
         set order ""
     }
-    if { ![info exists tables] } {
-        set tables ""
-    }
     if { [info exists out] && [string length $out] > 0 } {
         set out ",\n $out"
     } else {
         set out ""
     }
-    set txttbl [split $opt(txttid) .]
-
 
     set date_range_condition ""
     if { $df != "" } {
@@ -64,20 +58,20 @@ ad_proc openfts_driver__search {
     set permission_check_enabled_p [ad_parameter -package_id [apm_package_id_from_key openfts-driver] permission_check_enabled_p]
     set permission_check_condition ""
     if { $permission_check_enabled_p } {
-	append permission_check_condition "and acs_permission__permission_p( $opt(txttid), $user_id, 'read') = 't'"
+	append permission_check_condition "and acs_permission__permission_p( $self(TXTID), $user_id, 'read') = 't'"
     }
 
     set sql_count "
         select count(*)
-        from [lindex $txttbl 0]$tables
+        from $self(TABLE)
         where 
             $date_range_condition
             $condition
             $permission_check_condition"
 
     set sql_sort "
-        select $opt(txttid) as object_id$out 
-        from [lindex $txttbl 0]$tables 
+        select $self(TXTID) as object_id$out 
+        from $self(TABLE)
         where 
             $date_range_condition
             $condition
@@ -86,11 +80,12 @@ ad_proc openfts_driver__search {
         limit $limit
         offset $offset"
 
-    set result(stopwords) $opt(rejected)
     set result(count) [db_exec_plsql sql_count $sql_count]
     if { $result(count) > 0} { 
 	db_foreach sql_sort $sql_sort {lappend result(ids) $object_id}
     }
+    Search::OpenFTS::DESTROY
+
     return [array get result]
 
 }
@@ -115,7 +110,8 @@ ad_proc openfts_driver__index {
     array set idx [Search::OpenFTS::Index::new]
 
     Search::OpenFTS::Index::index idx $tid $txt $title
-    
+    Search::OpenFTS::DESTROY
+
     return
 
 }
@@ -130,6 +126,7 @@ ad_proc openfts_driver__unindex {
     array set idx [Search::OpenFTS::Index::new]
 
     Search::OpenFTS::Index::delete idx $tid
+    Search::OpenFTS::DESTROY
 
     return
 }
@@ -147,6 +144,7 @@ ad_proc openfts_driver__update_index {
 
     openfts_driver__unindex $tid
     openfts_driver__index $tid $txt $title $keywords
+    Search::OpenFTS::DESTROY
 
     return
 }
@@ -175,8 +173,10 @@ ad_proc openfts_driver__summary {
 
     array set fts [Search::OpenFTS::new ofts]
 
-    return [Search::OpenFTS::get_headline fts opts]
+    set summary [Search::OpenFTS::get_headline fts opts]
+    Search::OpenFTS::DESTROY
 
+    return $summary
 }
 
 
