@@ -31,6 +31,7 @@
             <file path="www/admin/initialize.adp"/>
             <file type="tcl_util" path="www/admin/initialize.tcl"/>
             <file type="documentation" path="www/doc/INSTALL"/>
+            <file type="documentation" path="www/doc/index.html"/>
             <file path="www/index.adp"/>
             <file type="tcl_util" path="www/index.tcl"/>
         </files>
