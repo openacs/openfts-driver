@@ -1,13 +1,11 @@
-Last updated: September 12, 2001
+Last updated: Oct 11, 2002
 Maintainer: Neophytos Demetriou (k2pts@cytanet.com.cy)
 
 - Make sure you have installed all headers (for example, spi.h) 
   using "gmake install-all-headers" during the PostgreSQL installation. 
-  If you have not installed intarray, please do so now. intarray 
-  is under the contrib directory of the PostgreSQL source code. 
 
-- Download Search-OpenFTS-tcl-0.2.tar.gz from http://openfts.sourceforge.net/
-  and save it to /tmp/Search-OpenFTS-tcl-0.2.tar.gz
+- Download Search-OpenFTS-tcl-0.3.1.tar.gz from http://openfts.sourceforge.net/
+  and save it to /tmp/Search-OpenFTS-tcl-0.3.1.tar.gz
 
 - Log in as the root user:
 
@@ -16,32 +14,12 @@ Maintainer: Neophytos Demetriou (k2pts@cytanet.com.cy)
 - Untar the archive file:
 
 	cd /usr/local/src
-	tar -xzvf /tmp/Search-OpenFTS-tcl-0.2.tar.gz
+	tar -xzvf /tmp/Search-OpenFTS-tcl-0.3.1.tar.gz
 
 
 - Install the OpenFTS AOLServer module:
 
-	chown -R nsadmin.web Search-OpenFTS-tcl-0.2/
-	cd Search-OpenFTS-tcl-0.2/
-	./configure --with-aolserver-src=AOLSERVER_SRC_DIR 
-	make
- 	cd aolserver
-	make
-	cp nsfts.so AOLSERVER_BIN_DIR
-	
-- Edit nsd.tcl file and add entry for nsfts module:
-
-       	ns_param   nssock          ${bindir}/nssock.so 
-       	ns_param   nslog           ${bindir}/nslog.so 
-  	...
-        ns_param   nsfts           ${bindir}/nsfts.so
-
-
-
-- Load intarray and func_pgsql
-
-	Edit load.sql under the openfts-driver/sql/postgresql directory.
-	psql -f load.sql your-database-name
+  Follow the directions in Search-OpenFTS-tcl-0.3.1/AOLSERVER.INSTALL
 
 - Install and mount the openfts-driver package
 
