@@ -28,11 +28,7 @@ ad_proc openfts_driver__search {
 
     set opt(rejected) [list]
 
-    if { ![info exists opt(txttid)] || [string equal $opt(txttid) ""] } {
-        set opt(txttid) $self(TXTTID)
-    }
-
-    foreach {out tables condition order} [Search::OpenFTS::get_sql self $query opt] break
+    foreach {out condition order} [Search::OpenFTS::get_sql self $query opt] break
 
     if { ![string length $condition] } {
         return [array get result]
@@ -42,16 +38,11 @@ ad_proc openfts_driver__search {
     } else {
         set order ""
     }
-    if { ![info exists tables] } {
-        set tables ""
-    }
     if { [info exists out] && [string length $out] > 0 } {
         set out ",\n $out"
     } else {
         set out ""
     }
-    set txttbl [split $opt(txttid) .]
-
 
     set date_range_condition ""
     if { $df != "" } {
@@ -64,20 +55,20 @@ ad_proc openfts_driver__search {
     set permission_check_enabled_p [ad_parameter -package_id [apm_package_id_from_key openfts-driver] permission_check_enabled_p]
     set permission_check_condition ""
     if { $permission_check_enabled_p } {
-	append permission_check_condition "and acs_permission__permission_p( $opt(txttid), $user_id, 'read') = 't'"
+	append permission_check_condition "and acs_permission__permission_p( $self(TXTID), $user_id, 'read') = 't'"
     }
 
     set sql_count "
         select count(*)
-        from [lindex $txttbl 0]$tables
+        from $self(TABLE)
         where 
             $date_range_condition
             $condition
             $permission_check_condition"
 
     set sql_sort "
-        select $opt(txttid) as object_id$out 
-        from [lindex $txttbl 0]$tables 
+        select $self(TXTID) as object_id$out 
+        from $self(TABLE)
         where 
             $date_range_condition
             $condition
