@@ -32,6 +32,7 @@ ad_proc openfts_driver__search {
 
     foreach {out condition order} [Search::OpenFTS::get_sql self $query opt] break
 
+    set result(stopwords) $opt(rejected)
     if { ![string length $condition] } {
         return [array get result]
     }
@@ -79,7 +80,6 @@ ad_proc openfts_driver__search {
         limit $limit
         offset $offset"
 
-    set result(stopwords) $opt(rejected)
     set result(count) [db_exec_plsql sql_count $sql_count]
     if { $result(count) > 0} { 
 	db_foreach sql_sort $sql_sort {lappend result(ids) $object_id}
