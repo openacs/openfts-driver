@@ -12,28 +12,11 @@
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
+        <summary>Full text search support for Search via OpenFTS.</summary>
+        <description format="text/html">Provides an implementation for the search packages service contract for searching on postgresql.</description>
 
         <!-- No dependency information -->
 
-        <files>
-            <file type="package_spec" path="openfts-driver.info"/>
-            <file type="data_model_create" db_type="postgresql" path="sql/postgresql/openfts-driver-create.sql"/>
-            <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/openfts-driver-drop.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/openfts-driver-sc-create.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/openfts-driver-sc-drop.sql"/>
-            <file type="tcl_init" path="tcl/openfts-driver-init.tcl"/>
-            <file type="tcl_procs" path="tcl/openfts-driver-procs.tcl"/>
-            <file type="tcl_util" path="www/admin/destroy.tcl"/>
-            <file path="www/admin/index.adp"/>
-            <file type="tcl_util" path="www/admin/index.tcl"/>
-            <file type="tcl_util" path="www/admin/initialize-2.tcl"/>
-            <file path="www/admin/initialize.adp"/>
-            <file type="tcl_util" path="www/admin/initialize.tcl"/>
-            <file type="documentation" path="www/doc/INSTALL"/>
-            <file type="documentation" path="www/doc/index.html"/>
-            <file path="www/index.adp"/>
-            <file type="tcl_util" path="www/index.tcl"/>
-        </files>
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="permission_check_enabled_p"  default="1" description="Check whether the user is allowed to read the object. This is used to filter the search results w.r.t the privileges of the user performing the query."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="openfts_tcl_src_path"  default="/usr/local/src/Search-OpenFTS-tcl-0.31/" description="Path to OpenFTS-TCL source directory."/>
