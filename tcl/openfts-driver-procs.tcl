@@ -12,10 +12,15 @@ ad_proc openfts_driver__search {
     limit
     user_id
     df
-    dt
+    packages
 } {
     @author Neophytos Demetriou
 } {
+    # JCD: I have done something horrible.  I took out dt and 
+    # made it packages.  when you search there is no way to specify a date range just
+    # last six months, last year etc.  I hijack what was the old dt param and make it 
+    # the package_id list and just empty string for dt.
+    set dt {}
 
     set result(count) 0
     set result(ids) ""
@@ -55,11 +60,30 @@ ad_proc openfts_driver__search {
 	append date_range_condition "'$dt' >= last_modified and"
     }
 
-    set permission_check_enabled_p [ad_parameter -package_id [apm_package_id_from_key openfts-driver] permission_check_enabled_p]
-    set permission_check_condition ""
-    if { $permission_check_enabled_p } {
-	append permission_check_condition "and acs_permission__permission_p( $self(TXTID), $user_id, 'read') = 't'"
+    # if we were passed package_ids restrict to those packages.
+    set ids {}
+    foreach id $packages {
+        if {[string is integer -strict $id]} {
+            lappend ids $id
+        }
     }
+    if {![empty_string_p $ids]} {
+        set package_restrict " and object_id in (select o.object_id from acs_objects o where o.package_id in ([join $ids ,])"
+    } else {
+        set package_restrict {}
+    }
+
+    set permission_check_enabled_p [ad_parameter -package_id [apm_package_id_from_key openfts-driver] permission_check_enabled_p]
+    if { $permission_check_enabled_p } {
+	append permission_check_condition "and exists (select 1
+                    from acs_object_party_privilege_map m
+                    where m.object_id = $self(TXTID)
+                      and m.party_id = :user_id
+                      and m.privilege = 'read')"
+    } else {
+        set permission_check_condition {}
+    }
+
 
     set sql_count "
         select count(*)
