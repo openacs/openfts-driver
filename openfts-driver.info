@@ -36,7 +36,8 @@
             <file type="tcl_util" path="www/index.tcl"/>
         </files>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="openfts_tcl_src_path"  default="/usr/local/src/Search-OpenFTS-tcl-0.1/" description="Path to OpenFTS-TCL source directory."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="permission_check_enabled_p"  default="1" description="Check whether the user is allowed to read the object. This is used to filter the search results w.r.t the privileges of the user performing the query."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="openfts_tcl_src_path"  default="/usr/local/src/Search-OpenFTS-tcl-0.2/" description="Path to OpenFTS-TCL source directory."/>
         </parameters>
 
     </version>
