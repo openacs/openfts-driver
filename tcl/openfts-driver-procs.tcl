@@ -174,7 +174,9 @@ ad_proc openfts_driver__summary {
 
     array set fts [Search::OpenFTS::new ofts]
 
-    set summary [Search::OpenFTS::get_headline fts opts]
+    if {[catch {set summary [Search::OpenFTS::get_headline fts opts]} errMsg]} {
+        return "WARNING: summary create failed."
+    }
     Search::OpenFTS::DESTROY
 
     return $summary
