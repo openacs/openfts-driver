@@ -6,6 +6,7 @@
     <pretty-plural>OpenFTS Drivers</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
+     <maturity>4</maturity>
 
     <version name="4.3d1" url="http://openacs.org/repository/download/apm/openfts-driver-4.3d1.apm">
     <database-support>
