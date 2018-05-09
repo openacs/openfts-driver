@@ -1,3 +1,3 @@
-set context {}
+set context [list]
 
 ad_return_template
