@@ -13,7 +13,7 @@
     </database-support>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
         <summary>Full text search support for Search via OpenFTS.  Deprecated in favor of the tsearch2-driver in OpenACS 5.2.</summary>
-        <description format="text/html">Provides an implementation for the search packages service contract for searching on postgresql.  Use tsearch2 instead.</description>
+        <description format="text/html">Provides an implementation for the search packages service contract for searching on PostgreSQL.  Use tsearch2 instead.</description>
         <maturity>4</maturity>
 
         <!-- No dependency information -->
